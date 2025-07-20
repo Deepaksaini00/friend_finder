@@ -52,7 +52,7 @@
 <form
   method="POST"
   use:enhance
-  class="card glass p-10 flex flex-col gap-1 md:w-[32rem]"
+  class="card  glass p-10 flex flex-col gap-1 md:w-[32rem]"
 >
   <h1 class="text-center text-4xl mb-8 mt-4">Register</h1>
 
@@ -147,9 +147,8 @@
     {/if}
   </label>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn bg-[#D3DAD9] hover:bg-[#A8C3BC] sm:w-[60%] mx-auto mb-1 mt-2">Submit</button>
   <div class="flex justify-around">
     <a class="btn btn-ghost btn-sm" href="/login">Login</a>
   </div>
 </form>
-

@@ -29,25 +29,23 @@
     console.log("--------------------", response);
     user: await response.json();
   }
+
 </script>
 
-<nav class="navbar bg-base-100 shadow fixed top-0 z-10 bg-slate-300">
+<nav class="navbar shadow fixed top-0 z-10 bg-[#6CA296]">
   <div class="flex-1">
     <a href="/" class="btn btn-ghost text-xl">Friend Finder</a>
   </div>
 
-  <div class="flex gap-8">
-    <div class=" flex-col form-control sm:max-w-50">
+  <div class="flex items-center gap-5 mr-8">
+    <div class="form-control">
       <input
         type="text"
         placeholder="Search"
-        class="input input-bordered"
+        class="input input-bordered w-64"
         bind:value={inputval}
         on:keyup={(event) => debounce(event.key)}
       />
-      <div class="flex-col">
-        <p>{inputval}</p>
-      </div>
     </div>
 
     <div class="flex-none gap-5 mr-8">
@@ -85,8 +83,12 @@
   <slot></slot>
 </div>
 
-<footer class="footer footer-center bg-base-300 text-base-content p-4 fixed bottom-0 left-0 w-full">
+<footer
+  class="footer footer-center bg-[#CCCCCC] text-base-content p-4 fixed bottom-0 left-0 w-full"
+>
   <aside>
-    <p>Copyright © {new Date().getFullYear()} - All right reserved by Deep saini</p>
+    <p>
+      Copyright © {new Date().getFullYear()} - All right reserved by Deep saini
+    </p>
   </aside>
 </footer>

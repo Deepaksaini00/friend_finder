@@ -22,12 +22,12 @@
 
 <!-- <div data-theme="cupcake"> -->
 <!-- <div data-theme="friend_theme"> -->
-<div data-theme="friend_theme" class="min-h-screen box-border custom-back bg-cover">
+<div data-theme="friend_theme" class="min-h-screen box-border  custom-back bg-cover">
   <slot></slot>
 </div>
 
 <style>
   .custom-back{
-    background-image: url('../../src/lib/static/bg.jpg');
+  background-color: #D3DAD9;
   }
 </style>

@@ -11,7 +11,7 @@
 <div class="flex h-64 w-full items-center">
   <div class="h-full aspect-square">
     <img
-      src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
+      src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
       class="h-full w-full p-12 rounded-full aspect-square"
       alt="?"
     />

@@ -1,5 +1,4 @@
-import { error, json, redirect } from "@sveltejs/kit";
-import { applyAction } from "$app/forms";
+import {redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from './$types';
 import { BACKEND_API } from "$lib/backend_api";
 import { unreachable } from "$lib/utils";

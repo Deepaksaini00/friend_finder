@@ -7,14 +7,12 @@ import type { RequestHandler } from "./$types";
 export const GET: RequestHandler = async ({ cookies, url }) => {
 	const token = cookies.get("session_token");
 	const username = url.searchParams.get("inputval")!;
-	console.log("**********", username);
 	if (token === undefined || token === "") {
 		redirect(303, "/login");
 	}
 
 	if (!username) {
-		// Use `fail` function from svelte:q!
-		
+
 		return fail(400,{ error: "No Userfound" });
 	}
 
@@ -31,13 +29,8 @@ export const GET: RequestHandler = async ({ cookies, url }) => {
 	if (response.status === 401) {
 		redirect(303, "/");
 	}
-	return new Response(JSON.stringify(response))
-
-
-	//// ??????????
+	const d = json(response)
+	console.log("*******************************************" , d)
+	return json(response.data);
+//return new Response(JSON.stringify(response))
 };
-
-// if (response.status === 200) {
-	// 	return {
-// 		search_data:	response.data,
-// 	}
