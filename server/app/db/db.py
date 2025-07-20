@@ -25,6 +25,8 @@ class User(SQLModel, table=True):
     joined_on: str = Field(default_factory=current_date)
     latitude: Optional[float]  = None  
     longitude: Optional[float] = None
+    avtar: Optional[str] = None
+
 
 class Topic(SQLModel, table=True):
     id: int = Field(primary_key=True, default=None)

@@ -68,7 +68,15 @@ async def migration_01(db: Database):
                         FOREIGN KEY(sender) REFERENCES users(id)
                         FOREIGN KEY(reciever) REFERENCES users(id)
                 );
+
           """)
 
 
-MIGRATIONS: list[MigrationFunction] = [migration_01]
+        
+async def migration_02(db: Database):
+    await db.execute("""
+        ALTER TABLE users ADD COLUMN avatar TEXT NOT NULL;
+    """)
+
+
+MIGRATIONS: list[MigrationFunction] = [migration_01 , migration_02]

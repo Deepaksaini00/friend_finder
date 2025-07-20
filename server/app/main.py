@@ -1,4 +1,5 @@
 import asyncio
+import random
 from collections import defaultdict
 from contextlib import asynccontextmanager
 import sqlite3
@@ -111,8 +112,16 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-
 )
+
+avtart = [
+    "avatar1.png",
+    "avatar2.png",
+    "avatar3.png",
+    "avatar4.png",
+    "avatar5.png",
+    "avatar6.png",
+]
 
 
 @app.get("/")
@@ -132,6 +141,7 @@ class LoginResponse(BaseModel):
     session_token: str
     id: int
     username: str
+    avatar: str
 
 
 class RegisterUniqueError(BaseModel):
@@ -151,12 +161,14 @@ async def register(body: RegisterBody, request: Request) -> LoginResponse:
         "utf-8"
     )
 
+    selected_avtart = random.choice(avtart)
     with Session(db) as session:  # BEGIN TRANSACTION
         user = tables.User(
             username=body.username,
             email=body.email,
             password=pass_hashed,
             pincode=body.pincode,
+            avatar=selected_avtart,
         )
         try:
             session.add(user)
@@ -192,6 +204,7 @@ async def register(body: RegisterBody, request: Request) -> LoginResponse:
             session_token=token,
             id=user.id,
             username=user.username,
+            avatar=user.avatar,
         )
 
 
@@ -611,7 +624,6 @@ def is_friend(session: Session, user1_id: int, user2_id: int):
         )
     )
     result = session.exec(stmt).first()
-    print("******************************************************************",result is not None)
     return session.exec(stmt).one_or_none() is not None
 
 
@@ -640,7 +652,7 @@ async def search_user(
             raise HTTPException(status_code=400, detail="Invalid Username")
         for u in user:
             users.append(UserInformation.from_user(u))
-        print(users)
+        # print(users)
         return SearchResponse(users=users)
 
 
@@ -714,7 +726,7 @@ def update_user_info(
     longitude: float,
 ):
     with Session(db) as session:
-        print("~~~~~~~~~~~~~~", latitude , longitude)
+        print("~~~~~~~~~~~~~~", latitude, longitude)
         statement = select(tables.User).where(tables.User.id == id)
         info = session.exec(statement).one()
         print("-----------------ifo", info)
