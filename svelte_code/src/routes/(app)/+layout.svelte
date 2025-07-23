@@ -3,33 +3,38 @@
 
   let val = "";
   let timer: number | undefined;
+  let showActive = false;
   export let inputval = "";
+  let users = [];
 
-  const debounce = (v: string) => {
+  
+  const debounce = (event:any) => {
+    const text = event.target.value;
+    console.log("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     clearTimeout(timer);
     timer = setTimeout(() => {
-      val = v;
+      val = text;
+      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
       if (inputval.length > 1) {
         finder();
+      } else {
+        users = [];
       }
     }, 750);
   };
 
   export async function finder() {
+
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~11~~~~~~~~")
     const response = await fetch(
       `/roll/?inputval=${encodeURIComponent(inputval)}`,
-      {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-        },
-      },
     );
+    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-    console.log("--------------------", response);
-    user: await response.json();
+    const data = await response.json();
+    users = data.users;
+    console.log("--------------------==============: ", users);
   }
-
 </script>
 
 <nav class="navbar shadow fixed top-0 z-10 bg-[#6CA296]">
@@ -44,7 +49,9 @@
         placeholder="Search"
         class="input input-bordered w-64"
         bind:value={inputval}
-        on:keyup={(event) => debounce(event.key)}
+        on:focus={() => (showActive = true)}
+        on:blur={() => (showActive = false)}
+        on:input={(event) => debounce(event)}
       />
     </div>
 
@@ -78,17 +85,20 @@
     </div>
   </div>
 </nav>
+{#if showActive}
+  <div class="fixed inset-0 z-0 backdrop-blur-sm bg-white/10"></div>
+{/if}
 
 <div class="pt-20 m-auto max-w-screen-lg md:px-5 px-2">
   <slot></slot>
 </div>
 
 <footer
-  class="footer footer-center bg-[#CCCCCC] text-base-content p-4 fixed bottom-0 left-0 w-full"
+  class="footer footer-center bg-[#CCCCCC] text-base-content fixed h-10 bottom-0 left-0 w-full"
 >
   <aside>
     <p>
-      Copyright © {new Date().getFullYear()} - All right reserved by Deep saini
+      Copyright © {new Date().getFullYear()} - All right reserved by Deepak saini
     </p>
   </aside>
 </footer>

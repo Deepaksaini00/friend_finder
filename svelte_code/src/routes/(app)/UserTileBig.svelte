@@ -11,9 +11,9 @@
 <div class="flex h-64 w-full items-center">
   <div class="h-full aspect-square">
     <img
-      src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-      class="h-full w-full p-12 rounded-full aspect-square"
-      alt="?"
+      src = {`/avatar/${user_info.user.avatar}`}
+      class="h-full w-full p-8 rounded-full "
+      alt="profile"
     />
   </div>
   <div class="grow flex flex-col m-3">

@@ -1,19 +1,22 @@
 <script lang="ts">
-  import { MessageSquare, UserPlus, UserRoundCheck } from "lucide-svelte";
+  import { MessageSquare, User, UserPlus, UserRoundCheck } from "lucide-svelte";
   import type { Components } from "../../backend_openapi";
   import { formatDistance } from "date-fns";
-    import { enhance } from "$app/forms";
+  import { enhance } from "$app/forms";
+  import { assets } from "$app/paths";
 
   export let user_info: Components.Schemas.UserWithTopics;
 
   let href = `/user/${user_info.user.username}`;
 </script>
 
-<div class="rounded-2xl border-gray-300 shadow-sm flex sm:h-32 h-48 sm:w-96 w-84 sm:grow-0 grow  border-2 bg-violet-50">
+<div
+  class="rounded-2xl border-gray-300 shadow-sm flex sm:h-32 h-48 sm:w-96 w-84 sm:grow-0 grow border-2 bg-violet-50"
+>
   <a {href} class="h-full w-auto aspect-square flex-grow-0">
     <figure class="h-full w-full">
       <img
-        src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
+        src = {`/avatar/${user_info.user.avatar}`}
         class="h-full w-full p-5 rounded-full"
         alt="Profile"
       />
@@ -22,9 +25,6 @@
 
   <div class="grow flex flex-col m-3">
     <a {href} class="basis-0 grow flex gap-2 flex-col">
-      {#if user_info.user.name !== null}
-        <h5>{user_info.user.name}</h5>
-      {/if}
       <h3 class="text-lg font-bold hover:underline">
         @{user_info.user.username}
       </h3>

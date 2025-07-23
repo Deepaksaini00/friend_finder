@@ -5,9 +5,9 @@ import { building } from "$app/environment";
 import { env } from "$env/dynamic/private";
 
 // TODO(deepak): Change through environment variable
-export const BACKEND_BASE_URL = "http://localhost:8006";
+// export const BACKEND_BASE_URL = "http://localhost:8006";
 
-// export const BACKEND_BASE_URL = env.BACKEND_BASE_URL || "http://localhost:8000";
+export const BACKEND_BASE_URL = env.BACKEND_BASE_URL || "http://localhost:8000";
 
 /*
 Run following command to re-generate types (from fastapi openapi.json):

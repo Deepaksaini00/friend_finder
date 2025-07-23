@@ -33,7 +33,6 @@ export const load: PageServerLoad = async ({ cookies }) => {
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {
 		const form = await superValidate(request, zod(formSchema));
-		console.log("in regiser")
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -47,8 +46,6 @@ export const actions: Actions = {
 			pincode: Number.parseInt(form.data.pincode),
 			topics: form.data.topics,
 		};
-
-		console.log("================ data sending", form.data.topics)
 
 		const response = await client.register(null, data, {
 			validateStatus: (status) => {
@@ -72,6 +69,7 @@ export const actions: Actions = {
 			}
 			return fail(409, { form });
 		} else if (response.status === 200) {
+			console.log("========================\n",response.data)
 			// -> 200
 			cookies.set("session_token", response.data.session_token, {
 				maxAge: 3600 * 24 * 365 * 100,

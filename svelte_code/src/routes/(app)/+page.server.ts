@@ -36,7 +36,6 @@ export const load: PageServerLoad = async ({ cookies }) => {
 	if (profile_response.status !== 200) {
 		redirect(303, "/login");
 	}
-
 	return {
 		user_profile: profile_response.data,
 		suggestions: suggestion_response.data

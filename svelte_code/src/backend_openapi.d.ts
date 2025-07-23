@@ -88,6 +88,10 @@ declare namespace Components {
              * Username
              */
             username: string;
+            /**
+             * Avatar
+             */
+            avatar: string;
         }
         /**
          * Message
@@ -241,6 +245,10 @@ declare namespace Components {
              * Joined On
              */
             joined_on: string;
+            /**
+             * Avatar
+             */
+            avatar: string;
         }
         /**
          * UserWithTopics
@@ -554,6 +562,7 @@ declare namespace Paths {
     }
 }
 
+
 export interface OperationMethods {
   /**
    * home_page - Home Page
@@ -832,3 +841,19 @@ export interface PathsDictionary {
 
 export type Client = OpenAPIClient<OperationMethods, PathsDictionary>
 
+
+export type AddFriend = Components.Schemas.AddFriend;
+export type EditBody = Components.Schemas.EditBody;
+export type HTTPValidationError = Components.Schemas.HTTPValidationError;
+export type LoginBody = Components.Schemas.LoginBody;
+export type LoginResponse = Components.Schemas.LoginResponse;
+export type Message = Components.Schemas.Message;
+export type RegisterBody = Components.Schemas.RegisterBody;
+export type RegisterUniqueError = Components.Schemas.RegisterUniqueError;
+export type SearchBody = Components.Schemas.SearchBody;
+export type SearchResponse = Components.Schemas.SearchResponse;
+export type SendMessageBody = Components.Schemas.SendMessageBody;
+export type Topic = Components.Schemas.Topic;
+export type UserInformation = Components.Schemas.UserInformation;
+export type UserWithTopics = Components.Schemas.UserWithTopics;
+export type ValidationError = Components.Schemas.ValidationError;

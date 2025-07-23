@@ -12,8 +12,7 @@ export const GET: RequestHandler = async ({ cookies, url }) => {
 	}
 
 	if (!username) {
-
-		return fail(400,{ error: "No Userfound" });
+		return json({ error: "No Userfound"}, {status: 400});
 	}
 
 	let client = await BACKEND_API.getClient();
@@ -29,8 +28,5 @@ export const GET: RequestHandler = async ({ cookies, url }) => {
 	if (response.status === 401) {
 		redirect(303, "/");
 	}
-	const d = json(response)
-	console.log("*******************************************" , d)
 	return json(response.data);
-//return new Response(JSON.stringify(response))
 };
