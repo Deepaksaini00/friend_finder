@@ -79,4 +79,4 @@ async def migration_02(db: Database):
     """)
 
 
-MIGRATIONS: list[MigrationFunction] = [migration_01 , migration_02]
+MIGRATIONS: list[MigrationFunction] = [migration_01,migration_02 ]

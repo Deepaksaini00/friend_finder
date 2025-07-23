@@ -22,7 +22,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import bcrypt
 from datetime import datetime
 import secrets
-from db import db as tables
+from .db import db as tables
 from sqlmodel import SQLModel, and_, update, create_engine, Session, delete, select, or_
 from sqlalchemy import text
 
@@ -161,14 +161,14 @@ async def register(body: RegisterBody, request: Request) -> LoginResponse:
         "utf-8"
     )
 
-    selected_avtart = random.choice(avtart)
+    selected_avatar = random.choice(avtart)
     with Session(db) as session:  # BEGIN TRANSACTION
         user = tables.User(
             username=body.username,
             email=body.email,
             password=pass_hashed,
             pincode=body.pincode,
-            avatar=selected_avtart,
+            avatar=selected_avatar,
         )
         try:
             session.add(user)
@@ -234,7 +234,7 @@ async def login(body: LoginBody, response: Response) -> LoginResponse:
 
         session.commit()
 
-        return LoginResponse(session_token=token, id=user.id, username=user.username)
+        return LoginResponse(session_token=token, id=user.id, username=user.username,avatar=user.avatar)
 
 
 @dataclass
@@ -278,6 +278,7 @@ class UserInformation(BaseModel):
     number: Optional[str]
     address: Optional[str]
     joined_on: str
+    avatar:str
 
     @classmethod
     def from_user(cls, user: tables.User) -> "UserInformation":
@@ -290,6 +291,7 @@ class UserInformation(BaseModel):
             number=user.number,
             address=user.address,
             joined_on=user.joined_on,
+            avatar=user.avatar,
         )
 
 
@@ -652,7 +654,7 @@ async def search_user(
             raise HTTPException(status_code=400, detail="Invalid Username")
         for u in user:
             users.append(UserInformation.from_user(u))
-        # print(users)
+        print("------------------------------\n\n----------- :",users)
         return SearchResponse(users=users)
 
 
@@ -671,11 +673,11 @@ async def edit(
     body: EditBody,
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
 ):
-    print("++++++++++++++++++++++", body)
+    # print("++++++++++++++++++++++", body)
     topics = [topic.lower().strip() for topic in body.topics]
     topics = [topic for topic in topics if len(topic) != 0]
 
-    print("------------------", body.latitude, body.longitude)
+    # print("------------------", body.latitude, body.longitude)
 
     with Session(db) as session:  # BEGIN TRANSACTION
         try:
@@ -688,7 +690,7 @@ async def edit(
                 body.latitude,
                 body.longitude,
             )
-            print("------------------!!!!!!!!!!!!!!", body.latitude, body.longitude)
+            # print("------------------!!!!!!!!!!!!!!", body.latitude, body.longitude)
 
             # if len(topics) > 0:
             #     await insert_user_topics(session, user, topics)
@@ -710,9 +712,9 @@ async def edit(
                         message="username already exists", unique_field="username"
                     ).model_dump(),
                 )
-            print("^^^^^^^^^^^^^^^^^^^^^")
-            print(e)
-            print("^^^^^^^^^^^^^^^^^^^^^")
+            # print("^^^^^^^^^^^^^^^^^^^^^")
+            # print(e)
+            # print("^^^^^^^^^^^^^^^^^^^^^")
             raise Exception("Couldn't match email/username for Integrity Error")
 
 
@@ -726,10 +728,10 @@ def update_user_info(
     longitude: float,
 ):
     with Session(db) as session:
-        print("~~~~~~~~~~~~~~", latitude, longitude)
+        # print("~~~~~~~~~~~~~~", latitude, longitude)
         statement = select(tables.User).where(tables.User.id == id)
         info = session.exec(statement).one()
-        print("-----------------ifo", info)
+        # print("-----------------ifo", info)
         info.name = name
         info.username = new_username
         info.email = new_email

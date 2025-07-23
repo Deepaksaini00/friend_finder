@@ -1,13 +1,13 @@
 from datetime import datetime
-from databases.core import Database
+# from databases.core import Database
 
-from .migration import apply_migrations
-from .migrations_to_apply import MIGRATIONS
+# from .migration import apply_migrations
+# from .migrations_to_apply import MIGRATIONS
 
 from typing import Optional
 from sqlmodel import Field, SQLModel
 
-from sqlalchemy.types import JSON
+# from sqlalchemy.types import JSON
 
 
 def current_date():
@@ -25,8 +25,7 @@ class User(SQLModel, table=True):
     joined_on: str = Field(default_factory=current_date)
     latitude: Optional[float]  = None  
     longitude: Optional[float] = None
-    avtar: Optional[str] = None
-
+    avatar:str
 
 class Topic(SQLModel, table=True):
     id: int = Field(primary_key=True, default=None)

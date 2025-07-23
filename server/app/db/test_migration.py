@@ -51,7 +51,7 @@ async def test_migration():
     ############ Step 3: Apply migration 1 and 2 (should not give error)
     async def migration_02(db: databases.Database):
         await db.execute("""
-           ALTER TABLE user ADD COLUMN avatar TEXT NOT NULL; 
+           ALTER TABLE user ADD COLUMN name TEXT NOT NULL; 
         """)
 
     await migration.apply_migrations(db, [migration_01, migration_02])
