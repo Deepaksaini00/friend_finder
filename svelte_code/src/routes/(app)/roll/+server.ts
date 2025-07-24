@@ -5,6 +5,7 @@ import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ cookies, url }) => {
+
 	const token = cookies.get("session_token");
 	const username = url.searchParams.get("inputval")!;
 	if (token === undefined || token === "") {

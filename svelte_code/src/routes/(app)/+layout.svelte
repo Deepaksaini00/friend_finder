@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { CircleUserRound, LogOut, Send } from "lucide-svelte";
 
   let val = "";
@@ -6,15 +7,12 @@
   let showActive = false;
   export let inputval = "";
   let users = [];
-
   
   const debounce = (event:any) => {
     const text = event.target.value;
-    console.log("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     clearTimeout(timer);
     timer = setTimeout(() => {
       val = text;
-      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
       if (inputval.length > 1) {
         finder();
       } else {
@@ -25,17 +23,17 @@
 
   export async function finder() {
 
-    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~11~~~~~~~~")
     const response = await fetch(
       `/roll/?inputval=${encodeURIComponent(inputval)}`,
     );
-    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-
     const data = await response.json();
     users = data.users;
-    console.log("--------------------==============: ", users);
+    console.log("type: ",typeof(users));
+    console.log("users: ",users);
   }
+
 </script>
+
 
 <nav class="navbar shadow fixed top-0 z-10 bg-[#6CA296]">
   <div class="flex-1">
@@ -53,6 +51,24 @@
         on:blur={() => (showActive = false)}
         on:input={(event) => debounce(event)}
       />
+    </div>
+
+
+    <div
+      class=" border-gray-300 shadow-sm flex sm:h-32 h-48 sm:w-96 w-84 sm:grow-0 grow border-2 bg-violet-50"
+    >
+      {#each users as user }
+        <a {href} class="h-full w-auto aspect-square flex-grow-0">
+
+          <figure class="h-full w-full">
+            <img
+              src = {`/avatar/${user.avatar}`}
+              class="h-full w-full p-5 rounded-full"
+              alt="?"
+            />
+          </figure>
+        </a>
+      {/each}
     </div>
 
     <div class="flex-none gap-5 mr-8">
@@ -93,12 +109,14 @@
   <slot></slot>
 </div>
 
-<footer
-  class="footer footer-center bg-[#CCCCCC] text-base-content fixed h-10 bottom-0 left-0 w-full"
->
-  <aside>
-    <p>
-      Copyright © {new Date().getFullYear()} - All right reserved by Deepak saini
-    </p>
-  </aside>
-</footer>
+{#if $page.url.pathname === '/'}
+  <footer
+    class="footer footer-center bg-[#CCCCCC] text-base-content fixed h-10 bottom-0 left-0 w-full"
+  >
+    <aside>
+      <p>
+        Copyright © {new Date().getFullYear()} - All right reserved by Deepak saini
+      </p>
+    </aside>
+  </footer>
+{/if}

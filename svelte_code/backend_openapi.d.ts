@@ -288,6 +288,22 @@ declare namespace Components {
     }
 }
 declare namespace Paths {
+    namespace Accountedit {
+        export interface HeaderParameters {
+            authorization: /* Authorization */ Parameters.Authorization;
+        }
+        namespace Parameters {
+            /**
+             * Authorization
+             */
+            export type Authorization = string;
+        }
+        export type RequestBody = /* EditBody */ Components.Schemas.EditBody;
+        namespace Responses {
+            export type $200 = any;
+            export type $422 = /* HTTPValidationError */ Components.Schemas.HTTPValidationError;
+        }
+    }
     namespace AddFriend {
         export interface HeaderParameters {
             authorization: /* Authorization */ Parameters.Authorization;
@@ -299,22 +315,6 @@ declare namespace Paths {
             export type Authorization = string;
         }
         export type RequestBody = /* AddFriend */ Components.Schemas.AddFriend;
-        namespace Responses {
-            export type $200 = any;
-            export type $422 = /* HTTPValidationError */ Components.Schemas.HTTPValidationError;
-        }
-    }
-    namespace Edit {
-        export interface HeaderParameters {
-            authorization: /* Authorization */ Parameters.Authorization;
-        }
-        namespace Parameters {
-            /**
-             * Authorization
-             */
-            export type Authorization = string;
-        }
-        export type RequestBody = /* EditBody */ Components.Schemas.EditBody;
         namespace Responses {
             export type $200 = any;
             export type $422 = /* HTTPValidationError */ Components.Schemas.HTTPValidationError;
@@ -467,15 +467,6 @@ declare namespace Paths {
         }
     }
     namespace SearchUser {
-        export interface HeaderParameters {
-            authorization: /* Authorization */ Parameters.Authorization;
-        }
-        namespace Parameters {
-            /**
-             * Authorization
-             */
-            export type Authorization = string;
-        }
         export type RequestBody = /* SearchBody */ Components.Schemas.SearchBody;
         namespace Responses {
             export type $200 = /* SearchResponse */ Components.Schemas.SearchResponse;
@@ -672,18 +663,18 @@ export interface OperationMethods {
    * search_user - Search User
    */
   'search_user'(
-    parameters?: Parameters<Paths.SearchUser.HeaderParameters> | null,
+    parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.SearchUser.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.SearchUser.Responses.$200>
   /**
-   * edit - Edit
+   * accountedit - Accountedit
    */
-  'edit'(
-    parameters?: Parameters<Paths.Edit.HeaderParameters> | null,
-    data?: Paths.Edit.RequestBody,
+  'accountedit'(
+    parameters?: Parameters<Paths.Accountedit.HeaderParameters> | null,
+    data?: Paths.Accountedit.RequestBody,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.Edit.Responses.$200>
+  ): OperationResponse<Paths.Accountedit.Responses.$200>
 }
 
 export interface PathsDictionary {
@@ -822,20 +813,20 @@ export interface PathsDictionary {
      * search_user - Search User
      */
     'get'(
-      parameters?: Parameters<Paths.SearchUser.HeaderParameters> | null,
+      parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.SearchUser.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.SearchUser.Responses.$200>
   }
-  ['/edit']: {
+  ['/accountedit']: {
     /**
-     * edit - Edit
+     * accountedit - Accountedit
      */
     'post'(
-      parameters?: Parameters<Paths.Edit.HeaderParameters> | null,
-      data?: Paths.Edit.RequestBody,
+      parameters?: Parameters<Paths.Accountedit.HeaderParameters> | null,
+      data?: Paths.Accountedit.RequestBody,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.Edit.Responses.$200>
+    ): OperationResponse<Paths.Accountedit.Responses.$200>
   }
 }
 

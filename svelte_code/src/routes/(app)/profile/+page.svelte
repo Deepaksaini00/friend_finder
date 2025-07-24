@@ -7,7 +7,7 @@
   export let data: PageData;
 </script>
 
-<UserTileBig user_info={data.self_profile} show_email={true} />
+<UserTileBig user_info={data.self_profile} show_email={true}  show_name={true}/>
 
 <div class="flex w-full justify-center">
   <a class="btn btn-primary" href="/profile/edit">

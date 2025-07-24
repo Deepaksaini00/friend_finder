@@ -23,7 +23,7 @@
 
     map.locate({ setView: true, maxZoom: 19 });
 
-    function onLocationFound(e) {
+    function onLocationFound(e:any) {
       var radius = e.accuracy;
       latitude = e.latlng["lat"];
       longitutde = e.latlng["lng"];
@@ -41,12 +41,12 @@
 
     }
 
-    function onLocationError(e) {
+    function onLocationError(e:any) {
       alert(e.message);
     }
     map.on("locationfound", onLocationFound);
     var popup = L.popup();
-    function onMapClick(e) {
+    function onMapClick(e:any) {
       popup
         .setLatLng(e.latlng)
         .setContent("You clicked the map at " + e.latlng.toString())
@@ -68,6 +68,6 @@
   crossorigin=""
 />
 
-<div class="max-w-[700px] max-h-[900px] md:mt-3">
-  <div class="border-1 w-[700px] h-[600px]" id="map"></div>
+<div class="max-w-[700px] max-h-[900px] md:mt-5 ">
+  <div class="border-2 w-[700px] h-[600px]" id="map"></div>
 </div>

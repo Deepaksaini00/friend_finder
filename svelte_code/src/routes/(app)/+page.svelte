@@ -11,7 +11,7 @@
   </span>
   <div class="flex flex-wrap justify-around gap-y-10 w-full">
     {#each data.suggestions as suggest}
-      <UserTile user_info={suggest}></UserTile>
+      <UserTile user_info={suggest} ></UserTile>
     {/each}
   </div>
 </div>

@@ -49,9 +49,6 @@ export const actions: Actions = {
 		}
 
 		const client = await BACKEND_API.getClient();
-		console.log("******edit*******");
-		console.log("******let lete *******", form.data.latitude);
-
 		const data = {
 			username: form.data.username,
 			email: form.data.email,
@@ -62,7 +59,7 @@ export const actions: Actions = {
 			topics: form.data.topics,
 		};
 
-		const response = await client.edit(
+		const response = await client.accountedit(
 			{
 				authorization: token,
 			},
@@ -73,7 +70,8 @@ export const actions: Actions = {
 				},
 			},
 		);
-		if (response.status) {
+
+		if (response.status === 422) {
 			console.log(JSON.stringify(response.data));
 			throw new Error("422 from fastapi");
 		}
@@ -83,6 +81,7 @@ export const actions: Actions = {
 				detail: Paths.Register.Responses.$409;
 			};
 
+			console.log("-------------------------" , data);
 			if (data["detail"]["unique_field"] === "email") {
 				form.errors.email = ["Email is already being used."];
 			} else if (data["detail"]["unique_field"] === "username") {
@@ -92,7 +91,6 @@ export const actions: Actions = {
 			}
 			return fail(409, { form });
 		} else if (response.status === 200) {
-			console.log("********************************************************************************")
 			redirect(303, "/profile");
 		} else {
 			unreachable();
