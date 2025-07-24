@@ -297,17 +297,23 @@ class UserInformation(BaseModel):
 
 #  Check the user is loge in or not
 @app.get("/get_current_user/")
+
 async def get_current_user(
+    
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
+    
 ) -> UserInformation:
     return UserInformation.from_user(current_user.user)
+
 
 
 #  Logout user
 @app.post("/logout/")
 async def logout(current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)]):
+    
     with Session(db) as session:
         session.delete(current_user.session)
+        
         session.commit()
 
 
@@ -320,10 +326,12 @@ class UserWithTopics(BaseModel):
 @app.get("/suggestion")
 async def suggestion(
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
+    
 ) -> list[UserWithTopics]:
     with Session(db) as session:
         stmt = select(tables.UserTopic).where(
             tables.UserTopic.user_id == current_user.user.id
+            
         )
         user_topics = session.exec(stmt).fetchall()
         topic_ids = [u.topic_id for u in user_topics]
@@ -336,7 +344,9 @@ async def suggestion(
             tables.UserTopic.user_id == tables.User.id,
             tables.UserTopic.topic_id == tables.Topic.id,
             tables.User.pincode == current_user.user.pincode,
+            
             tables.User.id != current_user.user.id,
+            
         )
 
         stmt = stmt.where(or_(*[tables.Topic.id == id for id in topic_ids]))
@@ -351,6 +361,7 @@ async def suggestion(
                     user=UserInformation.from_user(user),
                     topics=[topic],
                     is_friend=is_friend(session, current_user.user.id, user.id),
+                    
                 )
             else:
                 user_id_to_suggestion[user.id].topics.append(topic)
@@ -367,18 +378,23 @@ async def suggestion(
 async def user_profile(
     username: str,
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
+    
 ) -> UserWithTopics:
     with Session(db) as session:
         return get_user_with_topics(session, current_user.user.id, username=username)
+    
 
 
 @app.get("/user_profile")
 async def self_user_profile(
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
+    
 ) -> UserWithTopics:
     with Session(db) as session:
         return get_user_with_topics(
             session, current_user.user.id, username=current_user.user.username
+            
+            
         )
 
 
@@ -391,6 +407,7 @@ class AddFriend(BaseModel):
 async def add_friend(
     body: AddFriend,
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
+    
 ):
     with Session(db) as session:
         stmt = select(tables.User).where(tables.User.id == body.user_id)
@@ -403,6 +420,7 @@ async def add_friend(
         session.add(
             tables.FriendRequest(
                 sender=current_user.user.id,
+                
                 reciever=friend_user.id,
             )
         )
@@ -415,11 +433,13 @@ async def add_friend(
 @app.get("/get_inbox_users/")
 async def get_inbox_users(
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
+    
 ) -> list[UserWithTopics]:
     with Session(db) as session:
         # Get all friends added by current user
         stmt = select(tables.FriendRequest).where(
             tables.FriendRequest.sender == current_user.user.id,
+            
         )
         friend_requests = session.exec(stmt).fetchall()
 
@@ -430,7 +450,9 @@ async def get_inbox_users(
         stmt = select(tables.Message).where(
             or_(
                 tables.Message.sender == current_user.user.id,
+                
                 tables.Message.reciever == current_user.user.id,
+                
             )
         )
         messages = session.exec(stmt).fetchall()
@@ -442,13 +464,16 @@ async def get_inbox_users(
 
         # Remove current user's ID
         if current_user.user.id in inbox_user_ids:
+            
             inbox_user_ids.remove(current_user.user.id)
+            
 
         inbox_users: list[UserWithTopics] = []
 
         for id in inbox_user_ids:
             inbox_users.append(
                 get_user_with_topics(session, current_user.user.id, user_id=id)
+                
             )
         return inbox_users
 
@@ -463,11 +488,14 @@ async def send_message(
     body: SendMessageBody,
     username: str,
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
+    
 ) -> tables.Message:
     with Session(db) as session:
         user = get_user_with_topics(session, current_user.user.id, username=username)
+        
         message = tables.Message(
             sender=current_user.user.id,
+            
             reciever=user.user.id,
             content=body.message,
             client_id=str(body.client_id),
@@ -485,20 +513,24 @@ async def send_message(
 async def get_messages(
     username: str,
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
+    
     limit: int = 20,
     before_id: Optional[int] = None,
 ) -> list[tables.Message]:
     with Session(db) as session:
         user = get_user_with_topics(session, current_user.user.id, username=username)
+        
 
         stmt = select(tables.Message).where(
             or_(
                 and_(
                     tables.Message.sender == user.user.id,
                     tables.Message.reciever == current_user.user.id,
+                    
                 ),
                 and_(
                     tables.Message.sender == current_user.user.id,
+                    
                     tables.Message.reciever == user.user.id,
                 ),
             )
@@ -516,20 +548,25 @@ async def poll_message(
     username: str,
     after_id: int,
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
+    
     limit: int = 20,
 ) -> list[tables.Message]:
     with Session(db) as session:
         user = get_user_with_topics(session, current_user.user.id, username=username)
+        
         key = (current_user.user.id, user.user.id)
+        
         task = asyncio.create_task(message_handler.wait_for_message(key))
         stmt = select(tables.Message).where(
             or_(
                 and_(
                     tables.Message.sender == user.user.id,
                     tables.Message.reciever == current_user.user.id,
+                    
                 ),
                 and_(
                     tables.Message.sender == current_user.user.id,
+                    
                     tables.Message.reciever == user.user.id,
                 ),
             )
@@ -580,6 +617,7 @@ async def insert_user_topics(
 def get_user_with_topics(
     session: Session,
     current_user_id: int,
+    
     *,
     username: str | None = None,
     user_id: int | None = None,
@@ -609,6 +647,7 @@ def get_user_with_topics(
         user=UserInformation.from_user(user),
         topics=[t for t, _ in topics],
         is_friend=is_friend(session, current_user_id, user.id),
+        
     )
 
 
@@ -640,7 +679,6 @@ class SearchResponse(BaseModel):
 @app.get("/search_user")
 async def search_user(
     body: SearchBody,
-    current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
 ) -> SearchResponse:
     users: list[UserInformation] = []
     with Session(db) as session:
@@ -654,7 +692,6 @@ async def search_user(
             raise HTTPException(status_code=400, detail="Invalid Username")
         for u in user:
             users.append(UserInformation.from_user(u))
-        print("------------------------------\n\n----------- :",users)
         return SearchResponse(users=users)
 
 
@@ -668,21 +705,18 @@ class EditBody(BaseModel):
     longitude: float
 
 
-@app.post("/edit")
-async def edit(
+@app.post("/accountedit")
+async def accountedit(
     body: EditBody,
     current_user: Annotated[LoggedInUser, Depends(get_logged_in_user)],
-):
-    # print("++++++++++++++++++++++", body)
+    ):
     topics = [topic.lower().strip() for topic in body.topics]
     topics = [topic for topic in topics if len(topic) != 0]
-
-    # print("------------------", body.latitude, body.longitude)
-
     with Session(db) as session:  # BEGIN TRANSACTION
         try:
             update_user_info(
                 current_user.user.id,
+                current_user.session.token,
                 body.name,
                 body.username,
                 body.email,
@@ -690,8 +724,6 @@ async def edit(
                 body.latitude,
                 body.longitude,
             )
-            # print("------------------!!!!!!!!!!!!!!", body.latitude, body.longitude)
-
             # if len(topics) > 0:
             #     await insert_user_topics(session, user, topics)
 
@@ -712,14 +744,12 @@ async def edit(
                         message="username already exists", unique_field="username"
                     ).model_dump(),
                 )
-            # print("^^^^^^^^^^^^^^^^^^^^^")
-            # print(e)
-            # print("^^^^^^^^^^^^^^^^^^^^^")
             raise Exception("Couldn't match email/username for Integrity Error")
 
 
 def update_user_info(
     id: int,
+    token:str,
     name: str,
     new_username: str,
     new_email: str,
@@ -728,10 +758,8 @@ def update_user_info(
     longitude: float,
 ):
     with Session(db) as session:
-        # print("~~~~~~~~~~~~~~", latitude, longitude)
         statement = select(tables.User).where(tables.User.id == id)
         info = session.exec(statement).one()
-        # print("-----------------ifo", info)
         info.name = name
         info.username = new_username
         info.email = new_email
@@ -741,7 +769,7 @@ def update_user_info(
         session.add(info)
 
         session.commit()
-        session.add(tables.Session(user_id=user.id, token=token))
+        session.add(tables.Session(user_id=id, token=token))
 
 
 def use_route_names_as_operation_ids(app: FastAPI) -> None:
