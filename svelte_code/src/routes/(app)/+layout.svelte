@@ -1,14 +1,21 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from "$app/stores";
   import { CircleUserRound, LogOut, Send } from "lucide-svelte";
+  import type { ChangeEvent } from "sveltekit-superforms";
+  import { MapPin, User } from "lucide-svelte";
 
+  type users = {
+    username: string;
+    pincode: number;
+    avatar: string;
+  };
   let val = "";
   let timer: number | undefined;
   let showActive = false;
   export let inputval = "";
-  let users = [];
-  
-  const debounce = (event:any) => {
+  let users: users[] = [];
+
+  const debounce = (event: any) => {
     const text = event.target.value;
     clearTimeout(timer);
     timer = setTimeout(() => {
@@ -22,26 +29,21 @@
   };
 
   export async function finder() {
-
     const response = await fetch(
       `/roll/?inputval=${encodeURIComponent(inputval)}`,
     );
     const data = await response.json();
     users = data.users;
-    console.log("type: ",typeof(users));
-    console.log("users: ",users);
   }
-
 </script>
-
 
 <nav class="navbar shadow fixed top-0 z-10 bg-[#6CA296]">
   <div class="flex-1">
     <a href="/" class="btn btn-ghost text-xl">Friend Finder</a>
   </div>
 
-  <div class="flex items-center gap-5 mr-8">
-    <div class="form-control">
+  <div class="relative flex items-center gap-5 mr-8">
+    <div class="relative form-control">
       <input
         type="text"
         placeholder="Search"
@@ -51,24 +53,36 @@
         on:blur={() => (showActive = false)}
         on:input={(event) => debounce(event)}
       />
-    </div>
 
+      <div class="absolute flex flex-col pt-1 mt-10 w-full z-50">
+        <ul
+          class="flex flex-col justify-center bg-gray-300 w-full divide-y divide-gray-400"
+        >
+          {#if users.length > 0 && showActive}
+            {#each users as user}
+              <li class="p-2 hover:bg-gray-400 flex itmes-center gap-x-4">
+                <a
+                  href={`/user/${user.username}`}
+                  class="flex items-center gap-x-4 w-full"
+                >
+                  <img
+                    src={`/avatar/${user.avatar}`}
+                    alt="?"
+                    class="h-12 w-12 rounded-full"
+                  />
+                  <div class="flex flex-col">
+                    <h5 class="font-semibold">{user.username}</h5>
 
-    <div
-      class=" border-gray-300 shadow-sm flex sm:h-32 h-48 sm:w-96 w-84 sm:grow-0 grow border-2 bg-violet-50"
-    >
-      {#each users as user }
-        <a {href} class="h-full w-auto aspect-square flex-grow-0">
-
-          <figure class="h-full w-full">
-            <img
-              src = {`/avatar/${user.avatar}`}
-              class="h-full w-full p-5 rounded-full"
-              alt="?"
-            />
-          </figure>
-        </a>
-      {/each}
+                    <span class="text-sm">{user.pincode}</span>
+                  </div>
+                </a>
+              </li>
+            {/each}
+          {:else if showActive}
+            <h3 class="text-sm mt-4">No User Found!</h3>
+          {/if}
+        </ul>
+      </div>
     </div>
 
     <div class="flex-none gap-5 mr-8">
@@ -109,7 +123,7 @@
   <slot></slot>
 </div>
 
-{#if $page.url.pathname === '/'}
+{#if $page.url.pathname === "/"}
   <footer
     class="footer footer-center bg-[#CCCCCC] text-base-content fixed h-10 bottom-0 left-0 w-full"
   >

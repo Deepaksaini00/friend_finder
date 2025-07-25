@@ -29,5 +29,6 @@ export const GET: RequestHandler = async ({ cookies, url }) => {
 	if (response.status === 401) {
 		redirect(303, "/");
 	}
+	
 	return json(response.data);
 };
