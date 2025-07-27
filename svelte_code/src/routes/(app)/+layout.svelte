@@ -1,8 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { CircleUserRound, LogOut, Send } from "lucide-svelte";
-  import type { ChangeEvent } from "sveltekit-superforms";
-  import { MapPin, User } from "lucide-svelte";
 
   type users = {
     username: string;
