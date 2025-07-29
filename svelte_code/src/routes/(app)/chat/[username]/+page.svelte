@@ -130,7 +130,7 @@
       {/if}
   {/snippet}
 
-  <div class="flex flex-col h-full rounded-2xl custom_back  container">
+  <div class="flex flex-col h-full rounded-2xl bg-[#26415E]  container">
     <div
       class="flex flex-col-reverse overflow-y-scroll grow"
       bind:this={chatWindow}
@@ -164,11 +164,3 @@
     </form>
   </div>
 
-<style>
-
-  .custom_back{
-    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT24NCJiDgLDxf5X1nSY98eXGSnPF-6ryCb-C4f-57oyal1w61KyxajKsak3ftJWHcaNP0&usqp=CAU");
-
-  }
-  
-</style>

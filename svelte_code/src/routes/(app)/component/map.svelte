@@ -1,5 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import {writable} from "svelte/store";
+  import {coordinates} from "../../../lib/components/coordinates"
 
   export let latitude: null | number = null;
   export let longitutde: null | number = null;
@@ -68,6 +70,6 @@
   crossorigin=""
 />
 
-<div class="max-w-[700px] max-h-[900px] md:mt-5 ">
-  <div class="border-2 w-[700px] h-[600px]" id="map"></div>
+<div class="max-w-[700px] max-h-[l00px] md:mt-5 ">
+  <div class="border-2 border-gray-400 w-[700px] h-[460px]" id="map"></div>
 </div>

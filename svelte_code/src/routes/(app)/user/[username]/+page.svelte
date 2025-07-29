@@ -10,6 +10,8 @@
   import { formatDistance } from "date-fns";
   import UserTileBig from "../../UserTileBig.svelte";
   import { enhance } from "$app/forms";
+  import Map from "../../component/map.svelte";
+
   export let data: PageData;
   $: user_info = data.profile_data;
   $: href = `/user/${user_info.user.username}`;
@@ -34,4 +36,8 @@
       </span>
     {/if}
   </div>
+</div>
+
+<div class="mt-10">
+  <Map />
 </div>

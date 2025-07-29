@@ -8,7 +8,7 @@
 </script>
 
 <div class="flex h-[85dvh] flex-row gap-5 items-stretch ">
-  <ul class="menu bg-base-200 w-56 rounded h-full gap-3">
+  <ul class="menu bg-base-300 w-60 border-2 border-gray-300 rounded h-full gap-3">
     {#each data.inbox_users as user}
       <li>
         <a
@@ -28,7 +28,7 @@
       </li>
     {/if}
   </ul>
-  <div class="border border-slate-300 bg-base-200 grow p-2 rounded">
+  <div class="border border-slate-300 bg-base-300 grow p-2 rounded">
   <slot />
   </div>
 </div>

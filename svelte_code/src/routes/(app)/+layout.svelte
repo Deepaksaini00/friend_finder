@@ -48,11 +48,16 @@
         class="input input-bordered w-64"
         bind:value={inputval}
         on:focus={() => (showActive = true)}
-        on:blur={() => (showActive = false)}
+        on:blur={() => showActive = false}
         on:input={(event) => debounce(event)}
       />
 
-      <div class="absolute flex flex-col pt-1 mt-10 w-full z-50">
+      <div
+        class="absolute flex flex-col pt-1 mt-10 w-full z-50"
+        role="button"
+        tabindex="0"
+        on:mousedown|preventDefault
+      >
         <ul
           class="flex flex-col justify-center bg-gray-300 w-full divide-y divide-gray-400"
         >
