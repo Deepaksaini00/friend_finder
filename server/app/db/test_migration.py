@@ -35,6 +35,7 @@ async def test_migration():
 
 
     ############ Step 2: Apply migration 1 again (should not give error)
+    # 
     await migration.apply_migrations(db, [migration_01])
 
     row = await db.fetch_one("""
@@ -49,6 +50,7 @@ async def test_migration():
     assert row is not None
 
     ############ Step 3: Apply migration 1 and 2 (should not give error)
+    # 
     async def migration_02(db: databases.Database):
         await db.execute("""
            ALTER TABLE user ADD COLUMN name TEXT NOT NULL; 

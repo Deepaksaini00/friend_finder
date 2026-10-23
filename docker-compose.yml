@@ -7,33 +7,33 @@
 
 services:
   frontend:
-    image: dr.nkit.dev/friend_finder/frontend:v9.3
+    image: dr.nkit.dev/friend_finder/frontend:v9.9.0
     environment:
       - "ORIGIN=https://friends.nkit.dev"
       - "BACKEND_BASE_URL=http://backend:8000"
     ports:
       - "3000:3000"
     networks:
-      - network_net
+      - network_net2
       - caddy
     labels:
       caddy: friends.nkit.dev
       caddy.reverse_proxy: "{{upstreams 3000}}"
 
   backend:
-    image: dr.nkit.dev/friend_finder/backend:v9.3
+    image: ttl.sh/friend_finder/backend:v9.9
     networks:
-      - network_net
+      - network_net2
     volumes:
-      - friend_finder_volume:/database
+      - friend_finder_volume2:/database
     environment:
       - "DATABASE_FILE=/database/v4.db"
     command: fastapi run app/main.py
 
 networks:
-  network_net:
+  network_net2:
   caddy:
     external: true
 
 volumes:
-  friend_finder_volume:
+  friend_finder_volume2:

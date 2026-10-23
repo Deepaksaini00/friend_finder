@@ -1,0 +1,23 @@
+# ---- Deployment ----
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: friend-finder-deployment
+  labels:
+    app: http-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: friend-finder
+  template:
+    metadata:
+      labels:
+        app: friend-finder
+    spec:
+      containers:
+        - name: friend-finder
+          image: nginx:latest # A simple Nginx web server image
+          ports:
+            - containerPort: 80

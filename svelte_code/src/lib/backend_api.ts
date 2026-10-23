@@ -5,12 +5,12 @@ import { building } from "$app/environment";
 import { env } from "$env/dynamic/private";
 
 // TODO(deepak): Change through environment variable
-export const BACKEND_BASE_URL = "http://localhost:8006";
+// export const BACKEND_BASE_URL = "http://localhost:8006";
 
-// export const BACKEND_BASE_URL = env.BACKEND_BASE_URL || "http://localhost:8000";
+export const BACKEND_BASE_URL = env.BACKEND_BASE_URL || "http://localhost:8006";
 
 /*
-Run following command to re-generate types (from fastapi openapi.json):
+Run following command to re-generate types (from fastapi openapi.jcson):
   npx openapicmd typegen http://localhost:8000/openapi.json > src/backend_openapi.d.ts
 */
 class BackendAPI {

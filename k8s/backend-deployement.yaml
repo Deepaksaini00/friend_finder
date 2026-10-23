@@ -1,0 +1,94 @@
+#Deployment 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: friend-finder-deployment
+  labels:
+    app: friend-finder-backend
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: friend-finder-backend
+  template:
+    metadata:
+      labels:
+        app: friend-finder-backend
+    spec:
+      containers:
+      - name: backend
+        image: ttl.sh/friend_finder/backend:v9.9.1 
+        command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8006"]
+        ports:
+        - containerPort: 8006
+        volumeMounts:
+          - name: friend-finder-volume
+            mountPath: /database
+        env:
+          - name: DATABASE_FILE
+            value: /database/friend_finder.db
+      volumes:
+        - name: friend-finder-volume
+          persistentVolumeClaim:
+            claimName: friend-finder-pvc        
+
+        
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: friend-finder-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+  
+    
+#Service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: friend-finder-backend
+  ports:
+    - protocol: TCP
+      port: 8006
+      targetPort: 8006
+  type: ClusterIP
+
+
+# -- Ingress --
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: backend-ingress 
+#   annotations:
+#     traefik.ingress.kubernetes.io/router.tls: "true"
+#     traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+#     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+# spec: 
+#   ingressClassName: traefik
+#   rules:
+#     - host: friends.new.nkit.dev
+#       http:
+#         paths:
+#           - path: /api
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: backend-service
+#                 port:
+#                   number: 8006
+#   tls:
+#     - hosts:
+#         - friends.new.nkit.dev
+#       secretName: tls-secret
+
